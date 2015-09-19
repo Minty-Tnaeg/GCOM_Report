@@ -1,0 +1,97 @@
+\documentclass[10pt, titlepage, a4paper, oneside]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{amssymb, graphicx, fancyhdr}
+\usepackage{url, comment}
+\usepackage[numbers]{natbib}
+
+\def\inst{Computer Science}
+\def\typeofdoc{Report}
+\def\course{Distributed Systems 7,5hp(\texttt{5DV147})}
+\def\pretitle{Project}
+\def\title{GCOM}
+
+\makeatletter
+\renewenvironment{thebibliography}[1]
+     {\section*{References}% <-- this line was changed from \chapter* to \section*
+      \@mkboth{\MakeUppercase\bibname}{\MakeUppercase\bibname}%
+      \list{\@biblabel{\@arabic\c@enumiv}}%
+           {\settowidth\labelwidth{\@biblabel{#1}}%
+            \leftmargin\labelwidth
+            \advance\leftmargin\labelsep
+            \@openbib@code
+            \usecounter{enumiv}%
+            \let\p@enumiv\@empty
+            \renewcommand\theenumiv{\@arabic\c@enumiv}}%
+      \sloppy
+      \clubpenalty4000
+      \@clubpenalty \clubpenalty
+      \widowpenalty4000%
+      \sfcode`\.\@m}
+     {\def\@noitemerr
+       {\@latex@warning{Empty `thebibliography' environment}}%
+      \endlist}
+\makeatother
+
+
+% Här börjar själva dokumentet
+\begin{document}
+	% skapar framsidan (om den inte duger: gör helt enkelt en egen)
+	\begin{titlepage}
+		\thispagestyle{empty}
+		\begin{large}
+			\begin{tabular}{@{}p{\textwidth}@{}}
+				\textbf{UMEÅ UNIVERSITET \hfill \today} \\
+				\textbf{Department of \inst} \\
+				\textbf{\typeofdoc} \\
+			\end{tabular}
+		\end{large}
+		\vspace{10mm}
+		\begin{center}
+			\LARGE{\pretitle} \\
+			\huge{\textbf{\course}}\\
+			\vspace{10mm}
+			\LARGE{\title} \\
+			\vspace{15mm}
+			\begin{large}
+				\begin{tabular}{ll}
+					\textbf{Name} & \textbf{E-mail} \\
+					Mikael Johansson & c10mjn@cs.umu.se \\
+					Stefan Lindström & c12slm@cs.umu.se \\
+				\end{tabular}
+			\end{large}
+			\vfill
+			\large{\textbf{Advisers}}\\
+			\vspace{2mm}
+			\begin{tabular}{l}
+				P-O Östberg \\
+				\hline
+			\end{tabular}
+		\end{center}
+	\end{titlepage}
+
+
+	% fixar sidfot
+	\lfoot{\footnotesize{Mikael Johansson, Stefan Lindström}}
+	\rfoot{\footnotesize{\today}}
+	\lhead{\sc\footnotesize\title}
+	\rhead{\nouppercase{\sc\footnotesize\leftmark}}
+	\pagestyle{fancy}
+	\renewcommand{\headrulewidth}{0.4pt}
+	\renewcommand{\footrulewidth}{0.4pt}
+	
+	\setlength{\parindent}{0mm}
+	
+\pagenumbering{roman}
+\tableofcontents
+\newpage
+\pagenumbering{arabic}
+\setlength{\parskip}{10pt}
+\input{contents}
+
+\newpage
+\input{bibliography}
+
+
+\end{document}
