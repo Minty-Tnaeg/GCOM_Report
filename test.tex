@@ -1,1 +1,22 @@
 \section{Test}
+This section contains all the test-cases we have deviced to show that the program can successfully complete all the requirements. 
+
+\subsection{Causal ordering}
+\paragraph*{Ordering}
+This test is to show that the causal ordering module works. The expected result is that all messages that are delivered are in causal order (See example \ref{ex:1}).
+\begin{enumerate}
+	\item Activate reordering of messages.
+	\item Send 4 messages to fill reordering buffer.
+	\item Start sending messages while watching the hold-back queue to make sure all messages are held back and delivered correctly. 
+\end{enumerate}
+
+\paragraph{Joining a group in progress}
+This test is to show that a new member which joins a group after messages has been sent will not be left out due to not having an up to date vector clock when joining. 
+\begin{enumerate}
+	\item Create 2 clients and join the same group with them.
+	\item Send atleast 1 message from each, making sure the other receives it. 
+	\item Create a third client and join the same group again. 
+	\item Check the comparation vector clock on the third client. Should be the same as the clock in the two other clients. 
+	\item Send message from one of the two original clients. Should be received in the new one. 
+\end{enumerate}
+
