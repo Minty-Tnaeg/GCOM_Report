@@ -48,17 +48,45 @@ The implementation for this project does however not follow that, instead it pla
 	every node/.style={align=center}]  
 \matrix (m){
 	\& \node[client] (client) {Client}; \& \\
+	\node[back] (message) {Message Module}; \&
+	\node[server] (middleware) {Middleware}; 
 	\& \node[user] (group) {Group Module}; \\
-	\& \node[back] (message) {Message ordering}; \\ 
-    \& \node [com] (com) {Communication};\\
+	\node[com] (com) {Communication Module}; \\
 	};	
-	\draw[both] (client) -- (group);
-	\draw[both] (group) -- (message);
-	\draw[both] (message) -- (com);
-	\draw[to] (com) -- (0.3,-3.5);
+	\draw[both] (client) -- (middleware);
+	\draw[both] (middleware) -- (group);
+	\draw[both] (middleware) -- (message);
+	\draw[both] (com) -- (message);
 	\end{tikzpicture}
 	\caption{Group communication overview}
-	\label{fig:classic}
+	\label{fig:imp}
 \end{figure}
+
+\subsubsection{Group Module}
+In the implementation described in this document the group module has the tasks of handling all group management issues presented in section \ref{sec:group}. That being methods that allow processes to join, create, leave and list members of a group. This module keeps track of all network proxys that are given by other processes. The group module is represented in blue in figure \ref{fig:imp} above.
+
+\subsubsection{Message Module}
+The message module that is represented in orange in figure \ref{fig:imp} above. The module keeps handles the issues presented above in section \ref{sec:messageOrdering}. Most of this is done with the help of abstract containers for the orderings. Where the containers wrap messages depending on a chosen type of container. The container types available is the \texttt{Causal} container and a \texttt{Unordered} container. The \texttt{Causal} container contains methods for comparing the logical clocks and then decides if the message should be presented or held back.
+
+The module parses two main types of messages, system messages and text messages. System messages are the following:
+
+\begin{itemize}
+	\item Join: Indicating a process wishes the to join the receivers group.
+	\item Election: The leader has crashed or left, an election has started.
+	\item Leave: A user has left the group. Message contains the user who left.
+	\item Error: Something has gone wrong for a process (a connection has failed).
+	\item New leader: A new leader was elected. Message contains leader.
+	\item Return election: Answer to election message to indicate alive.
+	\item Return Join: Gives the joining process every available process in the group.
+\end{itemize}
+
+The text message is just a container for the text sent by a process.
+
+\subsubsection{Communication module}
+This is the module that is represented in green in figure \ref{fig:imp}. The module implements basic multi-cast. 
+
+ 
+
+
 
 
