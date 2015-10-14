@@ -1,1 +1,54 @@
 \section{User Manual}
+Source code and build scripts for the \mw\ with a name server and the client implementation exists at two locations:
+
+\begin{tabular}{l}
+	$\sim$\texttt{/c10mjn/edu/5dv147/project/}\\
+	$\sim$\texttt{/c12slm/edu/5dv147/project/}\\
+\end{tabular}
+
+Where source code exists in the \texttt{src/} directory. The source code can also be cloned from our git repository with:
+
+\begin{verbatim}
+git clone https://github.com/Minty-Tnaeg/GCOM_middleware.git
+\end{verbatim}
+
+\subsection{Build \& Run}
+The client and \mw\ and the name server all exists in the same executable \texttt{jar} that can be compiled with a \textit{ant} displayed below. The script will give a client executable.
+
+\begin{verbatim}
+ant client
+\end{verbatim}
+
+The name server exists in the same directory and is built with the same \textit{ant} script but has a different argument and is displayed below. The script will generate a executable \texttt{jar} that will register a name server service for the machine running the program.
+
+\begin{verbatim}
+ant server
+\end{verbatim}
+
+\subsection{Name Server}
+The name server will start a \textit{rmiregistry} on the machine running the jar on port $33401$, where clients may connect. If the server succeeds with starting the program will print.
+
+\begin{verbatim}
+Name Server started
+\end{verbatim}
+
+
+\subsection{Client}
+When the client starts it will give a window where the user has to supply a alias used for chatting, a address to the name server and the name servers port and enable/disable debug mode.
+If the server then is available a group list window will be displayed where the user may supply a group name and will join if the name exists or create a new if the name is free. 
+
+If the user then joins a group it will give a chat window and if debug was enabled it will also produce a frame for the logical clock and other settings for the debugging of the client. Figures for each %TODO
+
+% Show figure of settings window
+
+
+% Show figure of group list
+
+
+% Show figure of chat window
+
+% Show figure of debug window.
+
+% Show figure of settings view
+
+% Show figure of vector view

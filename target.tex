@@ -1,0 +1,74 @@
+\section{Target \& Needs}
+Distributed systems are defined as a group of processes communicating across a network with the exchange of messages. These messages can contain a message to a single of the groups processes or contain instructions for the entire group. One way to do this is with the help of a \mw\ that gives an \texttt{API} for clients to use for communication. 
+
+This section of the report presents the targeted parts of the group communication project.
+
+\subsection{Middleware}
+The \mw\ is the abstraction of the message sending action in each process. Each process in the group has its own \mw\ and is used to hide differences in the underlying network. To allow developers and users to ignore some of the more complicated network programming.
+
+There exists many ways for a programmer to implement a distributed system but the more common one is to use some form of remote method invocation e.g. \textit{CORBA} of \textit{Java}s built in \textit{Java RMI} that allows for a method to be called on a remote machine. Where \textit{CORBA} is a more general way for implementation that allows for a variation of languages. 
+
+The focus of the implemented \mw\ should be towards message ordering. The essential functionality for the \mw\ is presented table \ref{tab:fundamental}.
+
+\begin{table}[h!]
+	\begin{tabular}{l p{8cm}}
+		% Functionallity & Description
+		Unordered messaging & Propagate message forward as they arrive. \\
+		Causal ordering & Messages should be shown in the order they where sent. \\
+		Basic multi-cast & Send messages to everyone, non-reliable. \\	
+	\end{tabular}
+	\caption{Fundamentals for the \mw}
+	\label{tab:fundamental}
+\end{table}
+
+The implemented \mw\ shall provide the functionality for group management a communication module that implements the multicast as well as a module for message ordering. 
+
+\subsubsection{Group management}
+The group management should be implemented as part of the \mw\ and has the purpose to allow clients to create/remove groups as well as join/leave groups.
+
+The group management should detect unreachable clients and notify group members on changes that affects the group e.g. leader left, new leader assigned.
+
+The group management is commonly discussed problem in distributed systems but the \mw\ can use a simplified version. The students should take three points in to consideration when implementing the group management.
+
+\begin{enumerate}
+	\item \textbf{Scalability}: How much information does the group management need.
+	\item \textbf{Limitation}: What problems could occur in the group management and can the implementation handle it.
+	\item \textbf{Partitioning}: What happens if part of the group is unable to reach another part of the group.
+\end{enumerate}
+
+
+\subsubsection{Message ordering}\label{sec:messageOrdering}
+There exists multiple types of orderings but as mentioned above the \mw s message ordering module only needs to handle \textit{Causal} and \textit{Unordered}. 
+
+Unordered is quite simple. Just send and receive everything. If messages arrive in the ''wrong'' order show it anyway.
+
+\textit{Causal} is however more complex. First of the message needs to be identifiable by who sent it as well as identifiable by which message in the order it is. 
+One way is to give the ordering module a logical clock. This clock is then passed along with each message. This clock contains a identifier for each member in the system and a sequence number for the latest message they sent (see example \ref{ex:1}). This introduces problems such as what should happen to joining processes if communication has gone on for a while or how should a new member be added to the clock. If messages arrive out of order they need to be held back until the process has caught up this is commonly done with a hold-back queue.
+
+
+\begin{example}
+In communication between two processes $P_1$ and $P_2$. The processes each have a identical logical clock:\newline $[<P_1, 0>, <P_2,0>]$\newline 
+Then $P_1$ sends a message and increasing its sequence number so its clock becomes: \newline $[<P_1,1>,<P_2,0>]$\newline
+When $P_2$ receives the message it compares the clock in the message with its own by taking the senders ID in its own clock and adding one to the sequence number if this matches the sent clock the message should be shown otherwise queue the message or throw is away if already seen.
+\label{ex:1}
+\end{example}
+
+\subsubsection{Communication}
+The communication module of the \mw\ just needs to implement basic multi-cast which is non-reliable. This means that the communication can be naive and just send the message to everyone and don't care if the message goes through or not.
+
+\subsection{Client}\label{sec:client}
+The \mw\ implements a \texttt{API} as mentioned at the beginning of this section. That \texttt{API} should be used by a implemented 
+client that has the basic functionality. It should be able to send messages between clients. It should be able to join a group or create a group. It needs to use a graphical user interface (GUI).
+
+The same \texttt{API} should also be used to implement a debug client that has the same functionality of the basic client as well as the possibility to simulate dropping of packets, unorder messages and delay packets. The debug client should also show the logical clock described in section \ref{sec:messageOrdering} that describes message ordering.
+
+
+
+\subsection{Deliverables}
+To succeed with the project presented in this report the authors needs to deliver:
+
+\begin{itemize}
+	\item A functional \mw\ that implements the fundamentals presented in table \ref{tab:fundamental}.
+	\item Basic client that uses the \mw\ described in section \ref{sec:client}.
+	\item Advanced debugging client that uses the \mw\ also described in section \ref{sec:client}.
+\end{itemize}

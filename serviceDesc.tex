@@ -1,0 +1,58 @@
+\section{Service Description}
+This section presents the current functionality of the group communication project. 
+
+\subsection{Overview}
+The current implementation of the group communication has three base components described below and their communication can be seen in figure \ref{fig:overView}.
+\begin{enumerate}
+	\item \texttt{Client}: Front end for the system, allows for user interaction.
+	\item \texttt{Name Server}: Centralised part of the system. Allows used for group lookup.
+	\item \texttt{Middleware}: \texttt{API} for network communication between clients as well as connecting to different groups with the help of the name server.
+\end{enumerate}
+\begin{figure}[h!]
+	\centering	
+\begin{tikzpicture}[ 
+	font=\sffamily,
+	every matrix/.style={ampersand replacement=\&,column sep=0.5cm,row sep=0.5cm},	
+	server/.style={rectangle, draw, fill=red!40, minimum height=1cm, minimum width=2cm, font=\ttfamily\footnotesize},
+	user/.style={rectangle, draw, fill=blue!40, minimum height=1cm, minimum width=2cm, font=\ttfamily\footnotesize},
+	back/.style={rectangle, draw, fill=orange!50, minimum height=1cm, minimum width=2cm, font=\ttfamily\footnotesize},
+	both/.style={<->,>=stealth',shorten >=1pt,semithick,font=\sffamily\footnotesize},	
+	to/.style={->,>=stealth',shorten >=1pt,semithick,font=\sffamily\footnotesize},
+	every node/.style={align=center}]  
+\matrix (m){
+	\& \node[server] (client) {Client}; \\
+	\& \node[user] (middleware) {Middleware};  \\
+	\& \& \node[back] (ns) {Name Server};\\
+	\& \node[user] (mw) {Middleware}; \\ 
+    \&	\node [server] (client2) {Client};\\
+	};	
+	\draw[to] (middleware) -- (client);
+	\draw[to] (middleware) -- (ns.west);	
+	\draw[both] (middleware.south) -- (mw);
+	\draw[to] (mw) -- (ns.west);
+	\draw[to] (mw) -- (client2);
+	\end{tikzpicture}
+	\caption{Group communication overview}
+	\label{fig:overView}
+\end{figure}
+
+\subsection{Client functionality}
+The project has one client that adapts to settings given at start. Where there is the primitive client window that allows for basic message sending and displaying. Then there is the debug window that adds functionality that allows for the following: Re-ordering of packets. Delaying packets and dropping packets. The debug window also display the processes own logical clock as well as the clock for each message present in the hold back queue.
+
+\subsection{Name Server}
+The name server allows for client to register groups where the server will keep track of the name of the group with a reference to the leader of the group to give if processes wishes to join. It also provides the possibility to remove a group if so wished by a process. 
+
+\subsection{Middleware}
+The \mw\ supplies the client with a interface to use for communication with other processes and this is mostly \texttt{event} based. The possible commands for a client to do is:
+
+\begin{itemize}
+	\item Create group: The client can supply a group name it wishes to create. If the group exists already the client will join said group instead.
+	\item Join group: The client can supply a group name to the group it wishes to join. If that name does not exists with the name server it will be created.
+	\item Add event listeners: Since the \mw\ is based around \texttt{events} listeners needs to be used to get the intended functionality.
+	\item Get group list: Get the list of all available groups with their leaders.
+	\item Send text: Send a text based message.
+	\item Fetch message: Get a message that triggered a listener.
+	\item Leave group: Lets a client leave a group.
+	\item Remove group: Remove a group.
+\end{itemize}
+

@@ -1,0 +1,64 @@
+\section{System Design}
+This section of the report contains the explanation of how and why the system was implemented as it is.
+The client and name server have simple designs and will hence not be touched in this section. The \mw\ is more complex and will construct the major part of this section.
+
+\subsection{Module overview}
+The \mw\ is constructed based around three modules. A group management module, a message ordering module and a communication module.
+Some models exists for such a module system for example where each module is placed on top of each other. Where communication is done from the communication module up to the message ordering module then to the group module and finally presented to the client (see figure \ref{fig:classic}).
+\begin{figure}[h!]
+	\centering	
+\begin{tikzpicture}[ 
+	font=\sffamily,
+	every matrix/.style={ampersand replacement=\&,column sep=0.5cm,row sep=0.5cm},	
+	server/.style={rectangle, draw, fill=red!40, minimum height=1cm, minimum width=2cm, font=\ttfamily\footnotesize},
+	user/.style={rectangle, draw, fill=blue!40, minimum height=1cm, minimum width=2cm, font=\ttfamily\footnotesize},
+	back/.style={rectangle, draw, fill=orange!50, minimum height=1cm, minimum width=2cm, font=\ttfamily\footnotesize},
+	com/.style={rectangle, draw, fill=green!50, minimum height=1cm, minimum width=2cm, font=\ttfamily\footnotesize},
+	both/.style={<->,>=stealth',shorten >=1pt,semithick,font=\sffamily\footnotesize},	
+	to/.style={->,>=stealth',shorten >=1pt,semithick,font=\sffamily\footnotesize},
+	every node/.style={align=center}]  
+\matrix (m){
+	\& \node[server] (client) {Client}; \\
+	\& \node[user] (group) {Group Module};  \\
+	\& \node[back] (message) {Message ordering}; \\ 
+    \& \node [com] (com) {Communication};\\
+	};	
+	\draw[both] (client) -- (group);
+	\draw[both] (group) -- (message);
+	\draw[both] (message) -- (com);
+	\draw[to] (com) -- (0.3,-3.5);
+	\end{tikzpicture}
+	\caption{Group communication overview}
+	\label{fig:classic}
+\end{figure}
+
+The implementation for this project does however not follow that, instead it places the modules around a central module. This is done because it allows better for parallel implementation and reduces dependency between modules (see figure \ref{fig:imp}).
+\begin{figure}[h!]
+	\centering	
+\begin{tikzpicture}[ 
+	font=\sffamily,
+	every matrix/.style={ampersand replacement=\&,column sep=0.5cm,row sep=0.5cm},	
+	client/.style={rectangle, draw, fill=white!40, minimum height=1cm, minimum width=2cm, font=\ttfamily\footnotesize},
+	server/.style={rectangle, draw, fill=red!40, minimum height=1cm, minimum width=2cm, font=\ttfamily\footnotesize},
+	user/.style={rectangle, draw, fill=blue!40, minimum height=1cm, minimum width=2cm, font=\ttfamily\footnotesize},
+	back/.style={rectangle, draw, fill=orange!50, minimum height=1cm, minimum width=2cm, font=\ttfamily\footnotesize},
+	com/.style={rectangle, draw, fill=green!50, minimum height=1cm, minimum width=2cm, font=\ttfamily\footnotesize},
+	both/.style={<->,>=stealth',shorten >=1pt,semithick,font=\sffamily\footnotesize},	
+	to/.style={->,>=stealth',shorten >=1pt,semithick,font=\sffamily\footnotesize},
+	every node/.style={align=center}]  
+\matrix (m){
+	\& \node[client] (client) {Client}; \& \\
+	\& \node[user] (group) {Group Module}; \\
+	\& \node[back] (message) {Message ordering}; \\ 
+    \& \node [com] (com) {Communication};\\
+	};	
+	\draw[both] (client) -- (group);
+	\draw[both] (group) -- (message);
+	\draw[both] (message) -- (com);
+	\draw[to] (com) -- (0.3,-3.5);
+	\end{tikzpicture}
+	\caption{Group communication overview}
+	\label{fig:classic}
+\end{figure}
+
+

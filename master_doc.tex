@@ -4,13 +4,29 @@
 \usepackage[english]{babel}
 \usepackage{amssymb, graphicx, fancyhdr}
 \usepackage{url, comment}
+\usepackage{mdframed}
+\usepackage{tikz}
 \usepackage[numbers]{natbib}
+\usetikzlibrary{shapes, arrows, backgrounds, fit, positioning, scopes, matrix}
+\usepackage{color}
+\definecolor{light-gray}{gray}{0.95}
+%Warnings
+\newmdtheoremenv[%
+	outerlinewidth = 4 ,
+	roundcorner = 5pt ,
+	leftmargin = 40 ,
+	rightmargin = 40 ,
+	backgroundcolor = light-gray ,
+	outerlinecolor = black ,
+	]{example}{Example}
 
 \def\inst{Computer Science}
 \def\typeofdoc{Report}
 \def\course{Distributed Systems 7,5hp(\texttt{5DV147})}
 \def\pretitle{Project}
-\def\title{GCOM}
+\def\title{Group Communication}
+
+\def\mw{\textit{middleware}}
 
 \makeatletter
 \renewenvironment{thebibliography}[1]
@@ -64,8 +80,11 @@
 			\vfill
 			\large{\textbf{Advisers}}\\
 			\vspace{2mm}
-			\begin{tabular}{l}
+			\begin{tabular}{|l|}
+				\hline
 				P-O Östberg \\
+				Ewnetu Bayuh Lakew \\
+				Ahmed Ali-Eldin \\
 				\hline
 			\end{tabular}
 		\end{center}
@@ -82,12 +101,13 @@
 	\renewcommand{\footrulewidth}{0.4pt}
 	
 	\setlength{\parindent}{0mm}
+	\setlength{\parskip}{10pt}	
 	
 \pagenumbering{roman}
 \tableofcontents
 \newpage
 \pagenumbering{arabic}
-\setlength{\parskip}{10pt}
+
 \input{contents}
 
 \newpage
