@@ -1,22 +1,193 @@
 \section{Test}
 This section contains all the test-cases we have deviced to show that the program can successfully complete all the requirements. 
 
-\subsection{Causal ordering}
-\paragraph*{Ordering}
-This test is to show that the causal ordering module works. The expected result is that all messages that are delivered are in causal order (See example \ref{ex:1}).
-\begin{enumerate}
-	\item Activate reordering of messages.
-	\item Send 4 messages to fill reordering buffer.
-	\item Start sending messages while watching the hold-back queue to make sure all messages are held back and delivered correctly. 
-\end{enumerate}
+\subsection*{Test 1: Creation of group}
+\paragraph{Purpose:} Test to show that the group module can create groups and that the name server will store them with the correctl leader. 
+\begin{table}[h!]
+	\begin{tabularx}{\textwidth}{|l|X|p{8pt}|}
+		\hline
+		1 & Start the name server. & \\
+		\hline
+		2 & Start client 1. & \\
+		\hline
+		3 & Create a group with client 1. &  \\
+		\hline
+		4 & Start client 2. & \\
+		\hline
+		5 & The group should exist with client 1 as leader in client 2. & \\
+		\hline
+	\end{tabularx}
+\end{table}
 
-\paragraph{Joining a group in progress}
-This test is to show that a new member which joins a group after messages has been sent will not be left out due to not having an up to date vector clock when joining. 
-\begin{enumerate}
-	\item Create 2 clients and join the same group with them.
-	\item Send atleast 1 message from each, making sure the other receives it. 
-	\item Create a third client and join the same group again. 
-	\item Check the comparation vector clock on the third client. Should be the same as the clock in the two other clients. 
-	\item Send message from one of the two original clients. Should be received in the new one. 
-\end{enumerate}
+\paragraph{Expected result:} The group exists on the name server with Client 1 as leader.
 
+\subsection*{Test 2: Member joining \& basic multi-cast}
+\paragraph{Purpose: } Test to show that a client can join a newly created group and send a message.
+\begin{table}[h!]
+	\begin{tabularx}{\textwidth}{|l|X|p{8pt}|}
+		\hline
+		1 & Start the name server. & \\
+		\hline
+		2 & Start client   1. & \\
+		\hline
+		3 & Create a group with client 1. & \\
+		\hline
+		4 & Start client   2. & \\
+		\hline
+		5 & Join existing group with client 2. & \\
+		\hline
+		6 & Send a message from either client. & \\
+		\hline
+		7 & Both clients should receive the message.  & \\
+		\hline		
+	\end{tabularx}
+\end{table}
+\paragraph{Expected result:} Both clients display the message.
+
+\subsection*{Test 3: Member leaving}
+\paragraph{Purpose:} Test to show that a member can leave/crash and the other clients will detect and not propagate messages to them.
+\begin{table}[h!]
+	\begin{tabularx}{\textwidth}{|l|X|p{8pt}|}
+		\hline
+		1 & Start the name server. & \\
+		\hline
+		2 & Start client   1. & \\
+		\hline
+		3 & Create a group with client from 2. & \\
+		\hline
+		4 & Start client   2. & \\
+		\hline
+		5 & Join existing group with client 2. & \\
+		\hline
+		6 & Start client   3. & \\
+		\hline
+		7 & Join existing group with client 3. & \\
+		\hline
+		8 & Send a message from client 3. & \\
+		\hline		
+		9 & Leave group with client 3. & \\
+		\hline
+		10 & Client 1 or 2 sends a message and sees that it doesn't send to client 3 and doesn't crash.& \\
+		\hline
+		11 & Client 1 and 2 should display the received message.& \\
+		\hline		
+	\end{tabularx}
+\end{table}
+
+\paragraph{Expected result: } Client 1 and 2 displays the message without crashing.
+
+\subsection*{Test 4: Causal, reordering \& hold-back queue}
+\paragraph{Purpose: } Test to show that the debug client can re-order messages and display the hold-back queue in order to also show that causal ordering works correctly.
+
+\begin{table}[h!]
+	\begin{tabularx}{\textwidth}{|l|X|p{8pt}|}
+		\hline
+		1 & Start the name server. & \\
+		\hline
+		2 & Start client 1 with causal message ordering. & \\
+		\hline
+		3 & Create a group with client 1. & \\
+		\hline
+		4 & Start client 2 with causal message ordering. & \\
+		\hline
+		5 & Join existing group with client 2.& \\
+		\hline
+		6 & Client 2 activates reordering. & \\
+		\hline
+		7 & Client 1 sends $n$ messages where $n$ is enough messages to put some messages in hold-back queue. & \\
+		\hline
+		8 & Client 2 deactivates reordering. & \\		
+		\hline
+		9 & Client 1 sends another message. & \\
+		\hline
+		10 & Both clients should display all the messages in the correct order. & \\
+		\hline
+	\end{tabularx}
+\end{table}
+
+\paragraph{Expected result:} All messages are displayed in the correct order in both clients.
+
+\subsection*{Test 5: Member joining causal ordering group in progress}
+\paragraph{Purpose: } Test to show that a client can join a group that has already sent messages with causal ordering,
+to show that a client can inherit the logical clock when joining a group.
+\begin{table}[h!]
+	\begin{tabularx}{\textwidth}{|l|X|p{8pt}|}
+		\hline
+		1 & Start the name server & \\
+		\hline
+		2 & Start client 1 with causal message ordering. & \\
+		\hline
+		3 & Create a group with client 1. & \\
+		\hline
+		4 & Start client   2 with causal message ordering. & \\
+		\hline
+		5 & Join existing group with client 2.& \\
+		\hline
+		6 & Send a message from either client 1 or 2. & \\
+		\hline
+		7 & Start client   3 with causal message ordering. & \\
+		\hline		
+		8 & Join group with client 3. & \\
+		\hline		
+		9 & Send message from either client 1 or 2. & \\
+		\hline		
+		10 & Client 3 should receive the message. & \\
+		\hline		
+	\end{tabularx}
+\end{table}
+
+\paragraph{Expected result:} Client 3 displays the message.
+
+
+\subsection*{Test 6: Inheriting message ordering}
+\paragraph{Purpose: } Test to show that clients can use unordered message ordering.
+\begin{table}[h!]
+	\begin{tabularx}{\textwidth}{|l|X|p{8pt}|}
+		\hline
+		1 & Start the name server & \\
+		\hline
+		2 & Start client 1 with unordered message ordering. & \\
+		\hline
+		3 & Create a group with client 1. & \\
+		\hline
+		4 & Start client 2 with unordered message ordering. & \\
+		\hline
+		5 & Join existing group with client 2.& \\
+		\hline
+		6 & Enable reordering in client 2. & \\
+		\hline
+		7 & Send messages from client 1. & \\
+		\hline		
+		8 & Messages in client 2 should arrive unordered.&\\
+		\hline		
+	\end{tabularx}
+\end{table}
+
+\paragraph{Expected result:} Client 2 displayes the messages unordered.
+\pagebreak
+
+\subsection*{Test 7: Inheriting message ordering}
+\paragraph{Purpose: } Test to show that a client starting a group with unordered message ordering will cause any joining client to use unordered message ordering.
+\begin{table}[h!]
+	\begin{tabularx}{\textwidth}{|l|X|p{8pt}|}
+		\hline
+		1 & Start the name server & \\
+		\hline
+		2 & Start client 1 with unordered message ordering. & \\
+		\hline
+		3 & Create a group with client 1. & \\
+		\hline
+		4 & Start client 2 with causal message ordering. & \\
+		\hline
+		5 & Join existing group with client 2.& \\
+		\hline
+		6 & Enable reordering in client 2. & \\
+		\hline
+		7 & Send messages from client 1. & \\
+		\hline		
+		8 & Messages in client 2 should arrive unordered. &\\
+		\hline		
+	\end{tabularx}
+\end{table}
+
+\paragraph{Expected result:} Client 2 displayes the messages unordered.

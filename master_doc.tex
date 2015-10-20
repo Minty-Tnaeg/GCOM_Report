@@ -3,10 +3,10 @@
 \usepackage[utf8]{inputenc}
 \usepackage[english]{babel}
 \usepackage{amssymb, graphicx, fancyhdr}
+\usepackage{tabularx}
 \usepackage{url, comment}
 \usepackage{mdframed}
 \usepackage{tikz}
-\usepackage[numbers]{natbib}
 \usetikzlibrary{shapes, arrows, backgrounds, fit, positioning, scopes, matrix}
 \usepackage{color}
 \definecolor{light-gray}{gray}{0.95}
@@ -27,29 +27,6 @@
 \def\title{Group Communication}
 
 \def\mw{\textit{middleware}}
-
-\makeatletter
-\renewenvironment{thebibliography}[1]
-     {\section*{References}% <-- this line was changed from \chapter* to \section*
-      \@mkboth{\MakeUppercase\bibname}{\MakeUppercase\bibname}%
-      \list{\@biblabel{\@arabic\c@enumiv}}%
-           {\settowidth\labelwidth{\@biblabel{#1}}%
-            \leftmargin\labelwidth
-            \advance\leftmargin\labelsep
-            \@openbib@code
-            \usecounter{enumiv}%
-            \let\p@enumiv\@empty
-            \renewcommand\theenumiv{\@arabic\c@enumiv}}%
-      \sloppy
-      \clubpenalty4000
-      \@clubpenalty \clubpenalty
-      \widowpenalty4000%
-      \sfcode`\.\@m}
-     {\def\@noitemerr
-       {\@latex@warning{Empty `thebibliography' environment}}%
-      \endlist}
-\makeatother
-
 
 % Här börjar själva dokumentet
 \begin{document}
