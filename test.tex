@@ -190,4 +190,31 @@ to show that a client can inherit the logical clock when joining a group.
 	\end{tabularx}
 \end{table}
 
-\paragraph{Expected result:} Client 2 displayes the messages unordered.
+\paragraph{Expected result: } Client 2 displayes the messages unordered.
+
+\subsection*{Test 8: Leader leaving and other process takes over leader}
+\paragraph{Purpose: } Test to show that if the leader leaves/crashes another process will take over leadership and processes can rejoin
+
+\begin{table}[h!]
+	\begin{tabularx}{\textwidth}{|l|X|p{8pt}|}
+		\hline
+		1 & Start the name server. & \\
+		\hline
+		2 & Start client 1.  & \\
+		\hline
+		3 & Create a group with client 1. & \\
+		\hline
+		4 & Start client 2. & \\
+		\hline
+		5 & Join existing group with client 2 (Note that leader is client 1).& \\
+		\hline
+		6 & Close down client 1. & \\
+		\hline
+		7 & Start client 3. & \\
+		\hline
+		8 & Group list for client 3 should now show that client 2 is leader & \\
+		\hline
+	\end{tabularx}
+\end{table}
+
+\paragraph{Expected result: } Group list for last started client should show client 1.
